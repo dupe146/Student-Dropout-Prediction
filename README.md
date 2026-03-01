@@ -1,6 +1,6 @@
-# 🎓 Student Dropout Prediction Using Machine Learning
+#  Student Dropout Prediction Using Machine Learning
 
-## 🎯 Project Overview
+##  Project Overview
 
 This project analyzes university student data to identify at-risk students before they drop out. By leveraging machine learning and comprehensive data preprocessing, the model achieves **85%+ accuracy** in predicting dropout risk, enabling proactive intervention strategies.
 
@@ -13,7 +13,7 @@ Universities face significant challenges with student retention. Early identific
 
 ---
 
-## 📊 Dataset
+##  Dataset
 
 - **Source**: University student records
 - **Size**: 1,000 students
@@ -33,7 +33,7 @@ Universities face significant challenges with student retention. Early identific
 
 ---
 
-## 🎯 Key Features
+##  Key Features
 
 ### Comprehensive Preprocessing Pipeline
 1. **Missing Value Imputation**
