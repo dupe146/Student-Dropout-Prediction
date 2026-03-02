@@ -1,100 +1,128 @@
-#  Student Dropout Prediction Using Machine Learning
+# 🎓 Student Dropout Prediction Using Machine Learning
 
 ##  Project Overview
 
-This project analyzes university student data to identify at-risk students before they drop out. By leveraging machine learning and comprehensive data preprocessing, the model achieves **85%+ accuracy** in predicting dropout risk, enabling proactive intervention strategies.
+This project analyzes university student data to identify at-risk students before they drop out.It demonstrates comprehensive data preprocessing techniques and machine learning model development on real-world messy data.
 
-### Business Problem
-Universities face significant challenges with student retention. Early identification of at-risk students allows institutions to:
+### **Business Problem**
+Universities struggle with student retention. Early identification of at-risk students allows institutions to:
 - Provide targeted academic support
 - Offer timely counseling services
-- Allocate financial aid effectively
+- Allocate resources effectively
 - Improve overall graduation rates
+
+### **Technical Approach**
+Binary classification using Random Forest to predict dropout risk based on academic and demographic features.
 
 ---
 
-##  Dataset
+## 📊 Dataset
 
 - **Source**: University student records
 - **Size**: 1,000 students
 - **Features**: 11 attributes
-- **Target**: Dropout status (Yes/No)
+- **Target**: Dropout status (Yes: 23.4%, No: 76.6%)
 
-### Features Include:
-- **Academic**: GPA, attendance rate, study hours
+### **Features Include:**
+- **Academic**: GPA, attendance rate, study hours per week
 - **Demographic**: Age, gender, department
 - **Socio-economic**: Financial aid status, parent education level, internet access
 
-### Data Characteristics:
-- ✅ Real dropout labels (23.4% dropout rate)
-- ✅ Missing values (5-15% in various columns)
-- ✅ Outliers and unrealistic values
+### **Data Challenges:**
+- ✅ Missing values (5-15% across features)
+- ✅ Unrealistic values (GPA ranging from -2.0 to 6.5)
 - ✅ Class imbalance (3.3:1 ratio)
+- ✅ Outliers in multiple features
 
 ---
 
 ##  Key Features
 
-### Comprehensive Preprocessing Pipeline
-1. **Missing Value Imputation**
-   - Numerical: Median imputation
-   - Categorical: Mode imputation
-   - 5-15% missing data handled
+### **1. Comprehensive Data Preprocessing**
 
-2. **Outlier Detection & Handling**
-   - IQR (Interquartile Range) method
-   - Capping strategy for extreme values
-   - Focus on GPA, attendance, and study hours
+**Missing Value Handling:**
+- Numerical features: Median imputation (robust to outliers)
+- Categorical features: Mode imputation (preserves common patterns)
+- Successfully handled 5-15% missing data across columns
 
-3. **Data Validation**
-   - Fixed unrealistic GPA values (-2.0 to 6.5 → 0.0 to 4.0)
-   - Validated attendance rates (0-100%)
-   - Capped extreme study hours
+**Unrealistic Value Correction:**
+- Identified invalid GPA range (-2.0 to 6.5)
+- Established valid range (0.0 to 4.0)
+- Replaced 12 invalid entries with median of valid values
+- Validated final range consistency
 
-4. **Class Imbalance Handling**
-   - SMOTE (Synthetic Minority Over-sampling)
-   - Balanced 76.6% vs 23.4% distribution
-   - Stratified train-test split
+**Outlier Detection & Treatment:**
+- Applied IQR (Interquartile Range) method
+- Detected outliers in GPA, attendance rate, and study hours
+- Used capping strategy (Winsorization) to limit extremes
+- Preserved data volume while reducing extreme influence
 
-5. **Feature Engineering**
-   - Categorical encoding (LabelEncoder)
-   - Feature scaling (StandardScaler)
-   - Text standardization
+### **2. Class Imbalance Handling**
+
+**Challenge**: 76.6% retained vs 23.4% dropout
+
+**Solution**: SMOTE (Synthetic Minority Over-sampling Technique)
+- Created synthetic examples of minority class
+- Balanced training data from 3.3:1 to 1:1 ratio
+- Improved model's ability to learn dropout patterns
+
+### **3. Feature Engineering**
+
+**Encoding:**
+- Label encoding for categorical variables (gender, department, financial aid, parent education, internet access)
+- Binary encoding for target variable (Yes=1, No=0)
+
+**Scaling:**
+- StandardScaler normalization (mean=0, std=1)
+- Applied to numerical features: GPA, attendance rate, study hours, age
+- Prevented scale-based feature dominance
+
+### **4. Model Development & Optimization**
+
+**Initial Approach:**
+- Random Forest with default parameters
+- Result: Severe overfitting (95% train, 64% test accuracy)
+
+**Optimization:**
+- Reduced max_depth (10 → 5)
+- Increased min_samples_split (2 → 20)
+- Added min_samples_leaf constraint (10)
+- Result: Reduced overfitting gap to 17%
 
 ---
 
 ## 🛠️ Technologies Used
 
-### Core Technologies
+### **Core Technologies**
 - **Python 3.12**
-- **Google Colab** - Cloud-based development
+- **Google Colab** - Cloud-based development environment
 
-### Libraries
+### **Libraries**
 ```python
-pandas==2.0.0          # Data manipulation
-numpy==1.24.0          # Numerical computing
-scikit-learn==1.3.0    # Machine learning
-imbalanced-learn==0.11.0  # SMOTE implementation
-matplotlib==3.7.0      # Visualization
-seaborn==0.12.0        # Statistical plots
+pandas==2.0.0              # Data manipulation
+numpy==1.24.0              # Numerical computing
+scikit-learn==1.3.0        # Machine learning algorithms
+imbalanced-learn==0.11.0   # SMOTE implementation
+matplotlib==3.7.0          # Visualization
+seaborn==0.12.0            # Statistical plots
 ```
 
-### Machine Learning
+### **Machine Learning**
 - **Algorithm**: Random Forest Classifier
-- **Hyperparameters**: 100 estimators, max_depth=10
+- **Configuration**: 100 estimators, max_depth=5, regularization constraints
 - **Validation**: 80/20 train-test split with stratification
 
 ---
 
 ##  Installation
 
-### Prerequisites
+### **Prerequisites**
 ```bash
 Python 3.12+
 Google Colab (recommended) or Jupyter Notebook
 ```
 
-### Setup
+### **Setup**
 ```bash
 # Clone the repository
 git clone https://github.com/dupe146/Student-Dropout-Prediction.git
@@ -102,70 +130,54 @@ cd Student-Dropout-Prediction
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Open notebook
-jupyter notebook Student_Dropout_Prediction_v2.ipynb
 ```
 
-### For Google Colab
+### **For Google Colab**
 1. Upload notebook to Google Colab
-2. Upload dataset to Google Drive
-3. Mount Drive and run cells sequentially
-
----
-
-## 💻 Usage
-
-### Quick Start
-```python
-# 1. Mount Google Drive
-from google.colab import drive
-drive.mount('/content/drive')
-
-# 2. Load dataset
-import pandas as pd
-df = pd.read_csv('/content/drive/MyDrive/path/to/data.csv')
-
-# 3. Run preprocessing pipeline
-# (See notebook for complete pipeline)
-
-# 4. Train model
-from sklearn.ensemble import RandomForestClassifier
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train_scaled, y_train_balanced)
-
-# 5. Make predictions
-predictions = model.predict(X_test_scaled)
-```
+2. Mount Google Drive and upload dataset
+3. Update data path in Cell 3
+4. Run all cells sequentially
 
 ---
 
 ## 📈 Results
 
-### Model Performance
+### **Model Performance**
+
 | Metric | Score |
 |--------|-------|
-| **Accuracy** | 85.3% |
-| **ROC-AUC** | 0.89 |
-| **Precision (Dropout)** | 82.1% |
-| **Recall (Dropout)** | 78.5% |
-| **F1-Score (Dropout)** | 80.2% |
+| **Test Accuracy** | 58-64% |
+| **ROC-AUC** | 0.49-0.50 |
+| **Training Accuracy** | 75% (after regularization) |
+| **Overfitting Gap** | 17% (significantly improved from initial 31%) |
 
-### Confusion Matrix
+### **Confusion Matrix**
 ```
               Predicted
               Retained  Dropout
 Actual  
-Retained      [150]     [12]
-Dropout       [17]      [21]
+Retained      [117]     [36]
+Dropout       [36]      [11]
 ```
 
-### Top Predictive Features
-1. **GPA** (32.4% importance)
-2. **Attendance Rate** (28.1% importance)
-3. **Study Hours per Week** (19.5% importance)
-4. **Parent Education Level** (8.3% importance)
-5. **Financial Aid Status** (6.2% importance)
+**Interpretation:**
+- True Negatives: 117 (correctly predicted retained)
+- False Positives: 36 (incorrectly predicted dropout)
+- False Negatives: 36 (missed actual dropouts)
+- True Positives: 11 (correctly predicted dropout)
+
+### **Feature Importance Rankings**
+
+| Rank | Feature | Importance |
+|------|---------|------------|
+| 1 | Attendance Rate | 18.9% |
+| 2 | GPA | 16.8% |
+| 3 | Hours Studied per Week | 16.7% |
+| 4 | Age | 12.4% |
+| 5 | Department | 11.8% |
+
+
+---
 
 ---
 
@@ -175,17 +187,16 @@ Dropout       [17]      [21]
 Student-Dropout-Prediction/
 │
 ├── Student_Dropout_Prediction_v2.ipynb  # Main analysis notebook
-├── README.md                             # Project documentation
-├── requirements.txt                      # Python dependencies
-├── .gitignore                           # Git ignore file
+├── README.md                              # Project documentation
+├── requirements.txt                       # Python dependencies
+├── .gitignore                            # Git ignore file
 │
-├── data/                                 # Dataset directory
+├── data/                                  # Dataset directory
 │   └── student_data_new.csv
 │
-└── images/                               # Visualizations
+└── images/                                # Visualizations
     ├── confusion_matrix.png
     ├── feature_importance.png
-    ├── class_distribution.png
     └── smote_comparison.png
 ```
 
@@ -193,77 +204,57 @@ Student-Dropout-Prediction/
 
 ## 🔬 Methodology
 
-### 1. Data Collection & Exploration
-- Loaded 1,000 student records
-- Identified 11 features
-- Discovered 5-15% missing values
-- Detected outliers in key metrics
+### **1. Data Loading & Exploration**
+- Loaded 1,000 student records with 11 features
+- Identified data quality issues (missing values, unrealistic entries)
+- Analyzed class distribution (23.4% dropout)
 
-### 2. Data Preprocessing
-**Missing Values:**
+### **2. Preprocessing Pipeline**
+
+**Step 1: Missing Values**
 ```python
 # Numerical: Median imputation
 df['GPA'].fillna(df['GPA'].median(), inplace=True)
 
 # Categorical: Mode imputation
-df['gender'].fillna(df['gender'].mode()[0], inplace=True)
+df['parent_education_level'].fillna(df['parent_education_level'].mode()[0], inplace=True)
 ```
 
-**Outlier Handling:**
+**Step 2: Unrealistic Values**
 ```python
-# IQR method
+# Fix GPA range
+valid_median = df[(df['GPA'] >= 0) & (df['GPA'] <= 4.0)]['GPA'].median()
+df.loc[(df['GPA'] < 0) | (df['GPA'] > 4.0), 'GPA'] = valid_median
+```
+
+**Step 3: Outliers**
+```python
+# IQR method with capping
 Q1 = df['GPA'].quantile(0.25)
 Q3 = df['GPA'].quantile(0.75)
 IQR = Q3 - Q1
 df['GPA'] = df['GPA'].clip(lower=Q1-1.5*IQR, upper=Q3+1.5*IQR)
 ```
 
-**Unrealistic Values:**
-```python
-# Fix GPA range (-2.0 to 6.5 → 0.0 to 4.0)
-valid_median = df[(df['GPA'] >= 0) & (df['GPA'] <= 4.0)]['GPA'].median()
-df.loc[(df['GPA'] < 0) | (df['GPA'] > 4.0), 'GPA'] = valid_median
-```
+### **3. Feature Engineering**
+- Encoded 5 categorical variables (gender, department, financial aid, parent education, internet access)
+- Scaled 4 numerical features (GPA, attendance, study hours, age)
+- Dropped identifier column (student_id)
 
-### 3. Feature Engineering
-- Encoded categorical variables (gender, department, etc.)
-- Scaled numerical features (StandardScaler)
-- Balanced classes with SMOTE
+### **4. Class Balancing**
+- Applied SMOTE to training data
+- Balanced from 613:187 to 613:613 (retained:dropout)
+- Maintained original test set distribution for realistic evaluation
 
-### 4. Model Development
-- Algorithm: Random Forest (100 trees)
-- Training: 800 samples (after SMOTE)
-- Testing: 200 samples
-- Validation: Stratified split
+### **5. Model Training**
+- Algorithm: Random Forest
+- Initial: Severe overfitting (95% train, 64% test)
+- Optimized: Reduced gap (75% train, 58% test)
+- Configuration: 100 trees, max_depth=5, min_samples_split=20, min_samples_leaf=10
 
-### 5. Model Evaluation
-- Multiple metrics (Accuracy, ROC-AUC, F1)
-- Confusion matrix analysis
-- Feature importance ranking
-
----
-
-## 💡 Key Insights
-
-### Academic Performance is Critical
-- **GPA is the strongest predictor** (32.4% importance)
-- Students with GPA < 2.5 are 4x more likely to drop out
-- Combination of low GPA + low attendance = high risk
-
-### Attendance Matters
-- **Attendance rate is second most important** (28.1%)
-- Below 50% attendance strongly correlates with dropout
-- Even with good GPA, poor attendance increases risk
-
-### Study Habits Impact Retention
-- Students studying <5 hours/week are at higher risk
-- Optimal study time: 10-15 hours/week
-- Diminishing returns beyond 25 hours/week
-
-### Socio-Economic Factors
-- Parent education level moderately impacts retention
-- Financial aid recipients have slightly higher dropout rates
-  (possibly due to underlying financial stress)
-- Internet access has minimal direct impact
+### **6. Evaluation**
+- Multiple metrics: Accuracy, ROC-AUC, confusion matrix
+- Feature importance analysis
+- Train-test performance comparison
 
 ---
